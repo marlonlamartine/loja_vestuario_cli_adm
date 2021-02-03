@@ -19,6 +19,15 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Entrar'),
         centerTitle: true,
+        actions: [
+          FlatButton(
+            onPressed: (){
+              Navigator.of(context).pushReplacementNamed('/signup');
+            },
+            textColor: Colors.white,
+            child: const Text('CRIAR CONTA', style: TextStyle(fontSize: 14),),
+          )
+        ],
       ),
       body: Center(
         child: Card(
@@ -78,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                                   );
                                 },
                                 onSuccess: (){
-                                  //TODO: Fechar tela de login
+                                  Navigator.of(context).pop();
                                 }
                             );
                           }

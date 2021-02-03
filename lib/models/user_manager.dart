@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -12,12 +13,15 @@ class UserManager extends ChangeNotifier{
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final Firestore firestore = Firestore.instance;
 
-  FirebaseUser user;
+  User user;
 
   bool _loading = false;
 
   bool get loading => _loading;
+
+  bool get isLogged => user != null;
 
   /*
   método para logar o usuário que recebe como parâmetros opcionais um obj user e duas funções de callback:
@@ -31,13 +35,47 @@ class UserManager extends ChangeNotifier{
       final AuthResult result = await auth.signInWithEmailAndPassword(
           email: user.email, password: user.password);
 
-      this.user = result.user;
+      _loadCurrentUser(firebaseUser: result.user);
+
 
       onSuccess();
     } on PlatformException catch (e){
       onFail(getErrorString(e.code));
     }
     loading = false;
+  }
+
+
+  /**
+  método para criar o usuário que recebe como parâmetros opcionais um obj user e duas funções de callback:
+  onFail - caso o login dê errado, onSuccess - caso o login de certo.
+  */
+  Future<void> signUp({User user, Function onFail, Function onSuccess}) async
+  {
+    loading = true;
+
+    try{
+      final AuthResult result = await auth.createUserWithEmailAndPassword(email: user.email, password: user.password);
+
+      //this.user = result.user;
+
+      user.id = result.user.uid;
+      this.user = user;
+
+      await user.saveData();
+
+      onSuccess();
+    } on PlatformException catch(e){
+      onFail(getErrorString(e.code));
+    }
+    loading = false;
+  }
+
+  void signOut()
+  {
+    auth.signOut();
+    user = null;
+    notifyListeners();
   }
 
   /*
@@ -50,17 +88,21 @@ class UserManager extends ChangeNotifier{
     notifyListeners();
   }
 
-  /*
-  método privado assíncrono que autentica o usuário de acordo com a instância da variável auth e insere numa variável do tipo
-  FirebaseUser. Se a variável currentUSer não for null a variável user recebe o currentUSer.
+  /**
+  método privado assíncrono que busca as informações do usuário de acordo com os dados armazenados no Firestore.
+  Se a variável currentUSer não for null, a variável user vai receber os dados do usuário logado.
   */
-  Future<void> _loadCurrentUser() async
+  Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async
   {
-    final FirebaseUser currentUser = await auth.currentUser();
+    final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
     if(currentUser != null)
     {
-      user = currentUser;
+      final DocumentSnapshot docUser = await firestore.collection('users')
+          .document(currentUser.uid).get();
+      
+      user = User.fromDocument(docUser);
+
+      notifyListeners();
     }
-    notifyListeners();
   }
 }
