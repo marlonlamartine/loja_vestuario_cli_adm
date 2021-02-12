@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual_2_0/models/product.dart';
+import 'package:loja_virtual_2_0/models/product_manager.dart';
 import 'package:loja_virtual_2_0/models/user_manager.dart';
 import 'package:loja_virtual_2_0/screens/base/base_screen.dart';
 import 'package:loja_virtual_2_0/screens/login/login_screen.dart';
+import 'package:loja_virtual_2_0/screens/product/product_screen.dart';
 import 'package:loja_virtual_2_0/screens/signup/signup_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -12,9 +15,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserManager(),
-      lazy: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductManager(),
+          lazy: false,
+        ),
+      ],
       child: MaterialApp(
         title: 'Loja Online Teste',
         debugShowCheckedModeBanner: false,
@@ -36,6 +47,12 @@ class MyApp extends StatelessWidget {
             case '/signup':
               return MaterialPageRoute(
                 builder: (_) => SignUpScreen()
+              );
+            case '/product':
+              return MaterialPageRoute(
+                  builder: (_) => ProductScreen(
+                    settings.arguments as Product
+                  )
               );
             case '/base':
             default:
