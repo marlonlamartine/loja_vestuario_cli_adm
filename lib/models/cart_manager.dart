@@ -60,7 +60,7 @@ class CartManager extends ChangeNotifier
 
   void _onItemUpdated()
   {
-    for(int i; i<items.length; i++){
+    for(int i = 0; i < items.length; i++){
       final cartProduct = items[i];
 
       if(cartProduct.quantity == 0){
