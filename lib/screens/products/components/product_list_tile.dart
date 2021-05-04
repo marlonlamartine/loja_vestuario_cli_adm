@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual_2_0/models/product.dart';
 
@@ -34,7 +33,7 @@ class ProductListTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(product.name,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -44,7 +43,7 @@ class ProductListTile extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'R\$ 19.99',
+                      'R\$ ${product.basePrice.toStringAsFixed(2)}',
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
