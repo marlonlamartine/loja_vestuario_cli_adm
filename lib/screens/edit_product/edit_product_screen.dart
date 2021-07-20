@@ -6,9 +6,12 @@ import 'package:loja_virtual_2_0/screens/edit_product/components/sizes_form.dart
 
 class EditProductScreen extends StatelessWidget {
 
-  EditProductScreen(this.product);
+  EditProductScreen(Product p) :
+        editing = p != null,
+        product = p != null ? p.clone() : Product();
 
   final Product product;
+  final bool editing;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -19,7 +22,7 @@ class EditProductScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Anúncio'),
+        title: Text(editing ? 'Editar Anúncio' : 'Criar Anúncio'),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
@@ -68,8 +71,8 @@ class EditProductScreen extends StatelessWidget {
                     color: primaryColor
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 8),
+                const Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 8),
                   child: Text(
                     'Descrição',
                     style: TextStyle(
@@ -96,13 +99,27 @@ class EditProductScreen extends StatelessWidget {
                   },
                 ),
                 SizesForm(product),
-                ElevatedButton(
-                    onPressed: (){
-                      if(formKey.currentState.validate()){
-                        print('válido');
-                      }
-                    },
-                    child: const Text('Salvar')
+                const SizedBox(height: 20,),
+                SizedBox(
+                  height: 44,
+                  child: ElevatedButton(
+                      onPressed: (){
+                        if(formKey.currentState.validate()){
+                          print('válido');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: Colors.white
+                        ),
+                        primary: primaryColor,
+                        onSurface: primaryColor.withAlpha(100),
+                      ),
+                      child: const Text(
+                          'Salvar',
+                        style: TextStyle(fontSize: 18),
+                      )
+                  ),
                 ),
               ],
             ),
