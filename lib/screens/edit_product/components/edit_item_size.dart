@@ -29,7 +29,7 @@ class EditItemSize extends StatelessWidget {
               }
               return null;
             },
-            onChanged: (name) => size.name,
+            onChanged: (name) => size.name = name,
           ),
         ),
         const SizedBox(width: 4,),
