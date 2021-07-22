@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual_2_0/common/custom_drawer/custom_drawer.dart';
 import 'package:loja_virtual_2_0/models/home_manager.dart';
+import 'package:loja_virtual_2_0/models/user_manager.dart';
 import 'package:loja_virtual_2_0/screens/home/components/section_list.dart';
 import 'package:loja_virtual_2_0/screens/home/components/section_staggered.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,38 @@ class HomeScreen extends StatelessWidget {
                     icon: const Icon(Icons.shopping_cart),
                     color: Colors.white,
                     onPressed: () => Navigator.of(context).pushNamed('/cart'),
+                  ),
+                  Consumer2<UserManager, HomeManager>(
+                      builder: (_, userManager, homeManager, __){
+                        if(userManager.adminEnabled){
+                          if(homeManager.editing){
+                            return PopupMenuButton(
+                                onSelected: (e){
+                                  if(e == 'Salvar'){
+                                    homeManager.saveEditing();
+                                  } else {
+                                    homeManager.discardEditing();
+                                  }
+                                },
+                                itemBuilder: (_){
+                                  return ['Salvar', 'Descartar'].map((e) {
+                                    return PopupMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    );
+                                  }).toList();
+                                }
+                            );
+                          } else{
+                            return IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: homeManager.enterEditing,
+                            );
+                          }
+                        } else {
+                          return Container();
+                        }
+                      }
                   ),
                 ],
               ),

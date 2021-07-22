@@ -10,6 +10,8 @@ class HomeManager extends ChangeNotifier{
 
   List<Section> sections = [];
 
+  bool editing = false;
+
   Firestore firestore = Firestore.instance;
 
   Future<void> _loadSections() async {
@@ -21,4 +23,23 @@ class HomeManager extends ChangeNotifier{
       notifyListeners();
     });
   }
+
+  void enterEditing()
+  {
+    editing = true;
+    notifyListeners();
+  }
+
+  void saveEditing()
+  {
+    editing = false;
+    notifyListeners();
+  }
+
+  void discardEditing()
+  {
+    editing = false;
+    notifyListeners();
+  }
+
 }
