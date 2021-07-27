@@ -1,5 +1,7 @@
 class SectionItem {
 
+  SectionItem({this.image, this.product});
+
   SectionItem.fromMap(Map<String, dynamic> map)
   {
     image = map['image'] as String;
@@ -8,6 +10,13 @@ class SectionItem {
 
   String image;
   String product;
+
+  SectionItem clone(){
+    return SectionItem(
+      image: image,
+      product: product,
+    );
+  }
 
   @override
   String toString() {
