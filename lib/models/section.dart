@@ -3,7 +3,9 @@ import 'package:loja_virtual_2_0/models/section_item.dart';
 
 class Section{
 
-  Section({this.name, this.type, this.items});
+  Section({this.name, this.type, this.items}){
+    items = items ?? [];
+  }
 
   Section.fromDocument(DocumentSnapshot document){
     name = document.data['name'] as String;
