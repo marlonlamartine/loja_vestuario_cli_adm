@@ -8,12 +8,12 @@ import 'package:loja_virtual_2_0/models/user_manager.dart';
 import 'package:loja_virtual_2_0/screens/adress/address_screen.dart';
 import 'package:loja_virtual_2_0/screens/base/base_screen.dart';
 import 'package:loja_virtual_2_0/screens/cart/cart_screen.dart';
+import 'package:loja_virtual_2_0/screens/checkout/checkout_screen.dart';
 import 'package:loja_virtual_2_0/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual_2_0/screens/login/login_screen.dart';
 import 'package:loja_virtual_2_0/screens/product/product_screen.dart';
 import 'package:loja_virtual_2_0/screens/select_product/select_product_screen.dart';
 import 'package:loja_virtual_2_0/screens/signup/signup_screen.dart';
-import 'package:loja_virtual_2_0/services/cepaberto_service.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -86,6 +86,10 @@ class MyApp extends StatelessWidget {
             case '/address':
               return MaterialPageRoute(
                   builder: (_) => AddressScreen()
+              );
+            case '/checkout':
+              return MaterialPageRoute(
+                  builder: (_) => CheckoutScreen()
               );
             case '/edit_product':
               return MaterialPageRoute(
