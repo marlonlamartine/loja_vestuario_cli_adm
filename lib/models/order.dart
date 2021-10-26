@@ -32,6 +32,9 @@ class Order{
   Address address;
   Timestamp date;
 
+  //formatando o id dos pedidos para exibir zeros antes do numero do pedido
+  String get formattedId => '#${orderId.padLeft(6, '0')}';
+
   Future<void> save() async {
     firestore.collection('orders').document(orderId).setData(
       {
