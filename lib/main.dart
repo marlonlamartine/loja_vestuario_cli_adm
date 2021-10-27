@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual_2_0/models/admin_users_manager.dart';
 import 'package:loja_virtual_2_0/models/cart_manager.dart';
 import 'package:loja_virtual_2_0/models/home_manager.dart';
+import 'package:loja_virtual_2_0/models/order.dart';
 import 'package:loja_virtual_2_0/models/orders_manager.dart';
 import 'package:loja_virtual_2_0/models/product.dart';
 import 'package:loja_virtual_2_0/models/product_manager.dart';
@@ -10,6 +11,7 @@ import 'package:loja_virtual_2_0/screens/adress/address_screen.dart';
 import 'package:loja_virtual_2_0/screens/base/base_screen.dart';
 import 'package:loja_virtual_2_0/screens/cart/cart_screen.dart';
 import 'package:loja_virtual_2_0/screens/checkout/checkout_screen.dart';
+import 'package:loja_virtual_2_0/screens/confirmation/confirmation_screen.dart';
 import 'package:loja_virtual_2_0/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual_2_0/screens/login/login_screen.dart';
 import 'package:loja_virtual_2_0/screens/product/product_screen.dart';
@@ -109,6 +111,12 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => SelectProductScreen()
               );
+            case '/confirmation':
+              return MaterialPageRoute(
+                  builder: (_) => ConfirmationScreen(
+                    settings.arguments as Order
+                  )
+              );  
             case '/base':
             default:
               return MaterialPageRoute(

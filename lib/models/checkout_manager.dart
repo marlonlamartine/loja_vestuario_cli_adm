@@ -49,7 +49,7 @@ class CheckoutManager extends ChangeNotifier{
     //limpando o carrinho
     cartManager.clear();
 
-    onSucess();
+    onSucess(order);
     loading = false;
   }
   
