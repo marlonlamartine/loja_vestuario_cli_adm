@@ -3,6 +3,8 @@ import 'package:loja_virtual_2_0/models/address.dart';
 import 'package:loja_virtual_2_0/models/cart_manager.dart';
 import 'package:loja_virtual_2_0/models/cart_product.dart';
 
+enum Status {canceled, preparing, transporting, delivered}
+
 class Order{
 
   Order.fromCartManager(CartManager cartManager){
@@ -10,6 +12,7 @@ class Order{
     price = cartManager.totalPrice;
     userId = cartManager.user.id;
     address = cartManager.address;
+    status = Status.preparing;
   }
 
   Order.fromDocument(DocumentSnapshot doc){
@@ -21,16 +24,65 @@ class Order{
     userId = doc.data['user'] as String;
     address = Address.fromMap(doc.data['address'] as Map<String, dynamic>);
     date = doc.data['date'] as Timestamp;
+
+    status = Status.values[doc.data['status'] as int];
   }
 
   final Firestore firestore = Firestore.instance;
+
+  DocumentReference get firestoreRef =>
+      firestore.collection('orders').document(orderId);
 
   String orderId;
   List<CartProduct> items;
   num price;
   String userId;
   Address address;
+  Status status;
   Timestamp date;
+
+  String get statusText => getStatusText(status);
+
+  void cancel(){
+    status = Status.canceled;
+    firestoreRef.updateData({'status' : status.index});
+  }
+
+  Function() get back{
+    return status.index >= Status.transporting.index ?
+    (){
+      status = Status.values[status.index - 1];
+      firestoreRef.updateData({'status' : status.index});
+    } : null;
+  }
+
+
+  Function() get advance{
+    return status.index <= Status.transporting.index ?
+    (){
+      status = Status.values[status.index + 1];
+      firestoreRef.updateData({'status' : status.index});
+    } : null;
+  }
+
+  static String getStatusText(Status status){
+    switch(status){
+      case Status.canceled:
+        return 'Cancelado';
+      case Status.preparing:
+        return 'Em preparação';
+      case Status.transporting:
+        return 'Em transporte';
+      case Status.delivered:
+        return 'Entregue';
+      default:
+        return '';
+    }
+  }
+
+  void updateFromDocument(DocumentSnapshot doc){
+    status = Status.values[doc.data['status'] as int];
+  }
 
   //formatando o id dos pedidos para exibir zeros antes do numero do pedido
   String get formattedId => '#${orderId.padLeft(6, '0')}';
@@ -42,6 +94,8 @@ class Order{
         'price': price,
         'user': userId,
         'address': address.toMap(),
+        'status': status.index,
+        'date': Timestamp.now(),
       }
     );
   }
