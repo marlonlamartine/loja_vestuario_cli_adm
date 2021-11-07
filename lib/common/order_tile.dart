@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual_2_0/models/order.dart';
+import 'package:loja_virtual_2_0/screens/orders/components/cancel_order_dialog.dart';
+import 'package:loja_virtual_2_0/screens/orders/components/export_address_dialog.dart';
 import 'package:loja_virtual_2_0/screens/orders/components/order_product_tile.dart';
 
 class OrderTile extends StatelessWidget {
@@ -66,7 +68,11 @@ class OrderTile extends StatelessWidget {
                   SizedBox(
                     width: 90,
                     child: TextButton(
-                        onPressed: order.cancel,
+                        onPressed: (){
+                          showDialog(
+                              context: context,
+                              builder: (_) => CancelOrderDialog(order));
+                        },
                         style: TextButton.styleFrom(),
                         child: const Text('Cancelar', style: TextStyle(color: Colors.red),)
                     ),
@@ -88,7 +94,11 @@ class OrderTile extends StatelessWidget {
                   SizedBox(
                     width: 90,
                     child: TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          showDialog(
+                              context: context,
+                              builder: (_) => ExportAddressDialog(order.address));
+                        },
                         child: Text('Endereço', style: TextStyle(color: primaryColor),)
                     ),
                   ),
