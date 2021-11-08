@@ -70,7 +70,7 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                         itemCount: filteredOrders.length,
                         itemBuilder: (_, index){
                           return OrderTile(
-                            filteredOrders.reversed.toList()[index],
+                            filteredOrders.toList()[index],
                             showControls: true,
                           );
                         }
